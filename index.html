@@ -71,7 +71,7 @@
 </script>
 -->
     <!--头部设置区-->
-    <header>
+    <header id="settingArea">
         <h1>小学数学试题生成器</h1>
         <h4>过程中请勿刷新或关闭页面，否则将无法续考</h4>
         <form id="testTimeForm" style="display: inline-block;">
@@ -140,8 +140,8 @@
                         <p>a.运算结果范围：
                             <input type="number" id="rangeMin" name="rangeMin" value="" required digits=true maxlength="10" min="1" max="10000" data-toggle="popover"
                                 data-placement="right" data-content="" /> -
-                            <input type="number" id="rangeMax" name="rangeMax" value="" required digits=true maxlength="10"
-                                min="1" max="10000" data-toggle="popover" data-placement="right" data-content="" />；
+                            <input type="number" id="rangeMax" name="rangeMax" value="" required digits=true maxlength="10" min="1" max="10000" data-toggle="popover"
+                                data-placement="right" data-content="" />；
                         </p>
                         <p>b.是否随机增加括号运算：
                             <input type="radio" id="contained" name="containsBrackets" value="1" required />
@@ -272,7 +272,7 @@
     </xdoc>
 </script>
     <!--暂停显示区-->
-    <div class="pauseDiv">
+    <div id="resumeArea" class="pauseDiv">
         <p>暂停中</p>
     </div>
     <!--loadding区 -->

@@ -273,6 +273,13 @@ var pageObj = {
             }
         });
 
+        $('#resumeArea').on(
+            "click",
+            function () {
+                pageObj.resumeTest();
+            }
+        )
+
         //页面离开事件，若未完成试卷，则询问是否离开
         window.onbeforeunload = function () {
             if ($('.answer').is(":hidden") && !($('.test-paper-div').is(":hidden") && $('.pauseDiv').is(":hidden"))) {
@@ -898,6 +905,8 @@ var pageObj = {
                 $("#submit").removeClass("btn_common").addClass("btn_disable");
                 // 显示开始按钮，隐藏暂停/恢复按钮
                 $("#startTest").show();
+                // 隐藏设置
+                $('#settingArea').hide();
                 $("#pauseTest,#resumeTest").hide();
                 // 隐藏试卷区，隐藏暂停区
                 $(".test-paper-div,.pauseDiv").hide();
@@ -1019,12 +1028,16 @@ var pageObj = {
     // 暂停
     pauseTest: function () {
         $(".test-paper-div,.pauseDiv").toggle();
+        $('#pauseTest').toggle();
+        $('#resumeTest').toggle();
         $('#countDown').countdown('toggle');
     },
 
     // 恢复
     resumeTest: function () {
         $(".test-paper-div,.pauseDiv").toggle();
+        $('#pauseTest').toggle();
+        $('#resumeTest').toggle();
         $('#countDown').countdown('toggle');
     }
 
