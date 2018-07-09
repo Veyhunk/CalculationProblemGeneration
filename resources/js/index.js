@@ -10,13 +10,13 @@ var pageObj = {
         pageObj.loadSettingData();
     },
     // 默认考试时间
-    defaultTestTime: 15,
+    defaultTestTime: 30,
     // 考试时间限制
     maxTestTime: 120,
     // 大题数最大值限制
     maxPartNum: 5,
     // 大题中所含小题最大值限制
-    maxPartExercisesNum: 30,
+    maxPartExercisesNum: 50,
     // 加载配置事件
     loadEvents: function () {
         // 若不是管理员，则不允许访问高级设置
