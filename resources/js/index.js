@@ -279,6 +279,12 @@ var pageObj = {
                 pageObj.resumeTest();
             }
         )
+        $('#resetTest').on(
+            "click",
+            function () {
+                pageObj.resetTest();
+            }
+        )
 
         //页面离开事件，若未完成试卷，则询问是否离开
         window.onbeforeunload = function () {
@@ -907,7 +913,7 @@ var pageObj = {
                 $("#startTest").show();
                 // 隐藏设置
                 $('#settingArea').hide();
-                $("#pauseTest,#resumeTest").hide();
+                $("#pauseTest,#resumeTest,#resetTest").hide();
                 // 隐藏试卷区，隐藏暂停区
                 $(".test-paper-div,.pauseDiv").hide();
                 // 倒计时停止,隐藏倒计时
@@ -971,6 +977,7 @@ var pageObj = {
             $("#testResult").html(resultHtml).show();
             // 显示试卷区，隐藏 暂停区
             $(".test-paper-div").show();
+            $("#resetTest").show();
             $(".pauseDiv").hide();
             // 展示答案
             pageObj.showAnswer();
@@ -983,7 +990,7 @@ var pageObj = {
         // 倒计时停止,隐藏倒计时
         $('#countDown').countdown('stop').hide();
         // 显示开始按钮，隐藏暂停、恢复按钮
-        $("#startTest").show();
+        $("#startTest").hide();
         $("#pauseTest,#resumeTest").hide();
         // 将交卷、开始考试、下载、重置为初始状态
         $("#submit,#startTest,#download").removeClass("btn_common").addClass("btn_disable");
@@ -1039,6 +1046,15 @@ var pageObj = {
         $('#pauseTest').toggle();
         $('#resumeTest').toggle();
         $('#countDown').countdown('toggle');
+    },
+    // 恢复
+    resetTest: function () {
+        // 隐藏设置
+        $('#settingArea').show();
+        $("#pauseTest,#resumeTest,#resetTest").hide();
+        // 隐藏试卷区，隐藏暂停区
+        $(".test-paper-div,.pauseDiv").hide();
+        $('#countDownDiv').hide();
     }
 
 };
