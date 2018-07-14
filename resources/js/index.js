@@ -910,6 +910,7 @@ var pageObj = {
                 // 交卷按钮 恢复禁用
                 $("#submit").removeClass("btn_common").addClass("btn_disable");
                 // 显示开始按钮，隐藏暂停/恢复按钮
+                $('#countDownDiv').show();
                 $("#startTest").show();
                 // 隐藏设置
                 $('#settingArea').hide();
