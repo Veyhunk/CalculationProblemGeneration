@@ -582,7 +582,9 @@ var pageObj = {
                 return pageObj.getRandomNum(pageObj.getMaxValue(min, 2), Math.floor(Math.sqrt(max)));
             }
             if (sufMathFlag === '/') {
-                return pageObj.getRandomNonPrimeNum(Math.ceil(min * min), Math.floor(Math.sqrt(max)));
+
+                return pageObj.getRandomNonPrimeNum(Math.ceil(min * min), Math.ceil(max));
+                // return pageObj.getRandomNonPrimeNum(Math.ceil(min * min), Math.floor(Math.sqrt(max)));
             }
         }
         if (typeof (preMathFlag) === 'undefined') {
