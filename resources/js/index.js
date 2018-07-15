@@ -963,6 +963,7 @@ var pageObj = {
             $.each($(".test-paper-div .exersice"), function (i, v) {
                 var input = $(v).find("input:eq(0)");
                 var answer = $(v).find(".answerValue:eq(0)");
+                input.attr("disabled", true);
                 if (eval(input.val()) === eval(answer.html())) {
                     $(v).addClass("correct");
                     correctNum++;
@@ -1048,7 +1049,7 @@ var pageObj = {
         $('#resumeTest').toggle();
         $('#countDown').countdown('toggle');
     },
-    // 恢复
+    // 重新考试
     resetTest: function () {
         // 隐藏设置
         $('#settingArea').show();
