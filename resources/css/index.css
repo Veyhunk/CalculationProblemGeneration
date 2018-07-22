@@ -153,8 +153,9 @@ footer a{
     display: none;
 }
 .pauseDiv{
-    position: absolute;
-    top: 40%;
+    position: relative;
+    /* top: 40%; */
+    padding-top: 66px;
     left: 10%;
     width: 80%;
     height: 200px;
@@ -167,7 +168,7 @@ footer a{
 .pauseDiv p{
     font-size: 40px;
     text-align: center;
-    margin-top: 80px;
+    /* margin-top: 80px; */
     color: #fff;
 }
 .loading{
