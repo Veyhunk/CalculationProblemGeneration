@@ -3,6 +3,7 @@
  */
 // 页面主体
 var pageObj = {
+    DEV_MODEL: true,
     init: function () {
         // 加载配置事件
         pageObj.loadEvents();
@@ -287,11 +288,19 @@ var pageObj = {
         )
 
         //页面离开事件，若未完成试卷，则询问是否离开
-        window.onbeforeunload = function () {
+        if (!pageObj.DEV_MODEL) window.onbeforeunload = function () {
             if ($('.answer').is(":hidden") && !($('.test-paper-div').is(":hidden") && $('.pauseDiv').is(":hidden"))) {
                 return "试题还没做完哦，确认放弃？";
             }
         };
+
+        if (pageObj.DEV_MODEL) {
+            setTimeout(
+                () => {
+                    pageObj.gen();
+                }, 100
+            )
+        }
     },
 
     // 获取URL参数工具方法
@@ -582,7 +591,6 @@ var pageObj = {
                 return pageObj.getRandomNum(pageObj.getMaxValue(min, 2), Math.floor(Math.sqrt(max)));
             }
             if (sufMathFlag === '/') {
-
                 return pageObj.getRandomNonPrimeNum(Math.ceil(min * min), Math.ceil(max));
                 // return pageObj.getRandomNonPrimeNum(Math.ceil(min * min), Math.floor(Math.sqrt(max)));
             }
@@ -915,10 +923,11 @@ var pageObj = {
                 $('#countDownDiv').show();
                 $("#startTest").show();
                 // 隐藏设置
-                $('#settingArea').hide();
-                $("#pauseTest,#resumeTest,#resetTest").hide();
+                if (!pageObj.DEV_MODEL) $('#settingArea').hide();
+                if (!pageObj.DEV_MODEL) $("#resumeTest,#resetTest").hide();
+                $("#pauseTest").hide();
                 // 隐藏试卷区，隐藏暂停区
-                $(".test-paper-div,.pauseDiv").hide();
+                if (!pageObj.DEV_MODEL) $(".test-paper-div,.pauseDiv").hide();
                 // 倒计时停止,隐藏倒计时
                 var countDownDiv = $('#countDown');
                 if (!countDownDiv.is(":hidden")) {
@@ -933,13 +942,16 @@ var pageObj = {
                 }
                 // 隐藏上回考试结果
                 $("#testResult").hide();
+                if (pageObj.DEV_MODEL) {
+                    pageObj.startTest();
+                }
             }
         };
 
         // 验证所有设置是否通过
         if (pageObj.isAllSettingValidate()) {
             // 若当前试卷未完成，则询问是否放弃当前测试
-            if ($('.answer').is(":hidden") && !($('.test-paper-div').is(":hidden") && $('.pauseDiv').is(":hidden"))) {
+            if (!pageObj.DEV_MODEL && $('.answer').is(":hidden") && !($('.test-paper-div').is(":hidden") && $('.pauseDiv').is(":hidden"))) {
                 beAlert("当前试卷未完成，是否继续生成新试卷？", "", startGen, { type: 'info', showCancelButton: true });
             } else {
                 // 生成新试卷
@@ -992,10 +1004,10 @@ var pageObj = {
     showAnswer: function () {
         $(".answer").show();
         // 倒计时停止,隐藏倒计时
-        $('#countDown').countdown('stop').hide();
+        if (!pageObj.DEV_MODEL) $('#countDown').countdown('stop').hide();
         // 显示开始按钮，隐藏暂停、恢复按钮
-        $("#startTest").hide();
-        $("#pauseTest,#resumeTest").hide();
+        if (!pageObj.DEV_MODEL) $("#startTest").hide();
+        if (!pageObj.DEV_MODEL) $("#pauseTest,#resumeTest").hide();
         // 将交卷、开始考试、下载、重置为初始状态
         $("#submit,#startTest,#download").removeClass("btn_common").addClass("btn_disable");
 
@@ -1026,7 +1038,7 @@ var pageObj = {
             // 查看答案 解除禁用
             $("#showAnswer").removeClass("btn_disable").addClass("btn_common");
             // 暂停按钮 隐藏
-            $("#pauseTest").hide();
+            if (!pageObj.DEV_MODEL) $("#pauseTest").hide();
         });
 
         // 显示试题区域
@@ -1055,10 +1067,10 @@ var pageObj = {
     resetTest: function () {
         // 隐藏设置
         $('#settingArea').show();
-        $("#pauseTest,#resumeTest,#resetTest").hide();
+        if (!pageObj.DEV_MODEL) $("#pauseTest,#resumeTest,#resetTest").hide();
         // 隐藏试卷区，隐藏暂停区
-        $(".test-paper-div,.pauseDiv").hide();
-        $('#countDownDiv').hide();
+        if (!pageObj.DEV_MODEL) $(".test-paper-div,.pauseDiv").hide();
+        if (!pageObj.DEV_MODEL) $('#countDownDiv').hide();
     }
 
 };
