@@ -417,40 +417,43 @@ var pageObj = {
     },
 
     //判断当前数字是否为质数
-    isPrime: function (randomNum) {
-        for (var i = 2; i < randomNum; i++) {
+    isPrime: function (randomNum, max) {
+        for (var i = 2; i < max; i++) {
             if (randomNum % i === 0) {
-                return false;
+                if ((randomNum / i) < max) {
+                    return false;
+                }
             }
         }
         return true;
     },
 
     //获取一个非质数随机数
-    getRandomNonPrimeNum: function (start, end) {
+    getRandomNonPrimeNum: function (start, end, max, randomNum) {
         start = eval(start);
         end = eval(end);
         // 防止传入参数错误导致的负数结果
         if (start > end) {
             start = end;
         }
-        var randomNum = Math.floor(Math.random() * (end - start + 1) + start);
-        if (!pageObj.isPrime(randomNum)) {
+        if (!pageObj.isPrime(randomNum, max)) {
             return randomNum;
         } else {
-            return pageObj.getRandomNonPrimeNum(start, end);
+            ++randomNum;
+            if (randomNum > end) randomNum = start;
+            return pageObj.getRandomNonPrimeNum(start, end, max, randomNum);
         }
     },
 
     // 随机地在一定范围内获得除数
-    getRandomDivisorInRange: function (dividend, start, end) {
+    getRandomDivisorInRange: function (start, end, dividend) {
         if (!dividend) {
             return '';
         }
         start = pageObj.getMaxValue(2, start);
-        end = pageObj.getMaxValue(end, dividend);
+        end = pageObj.getMinValue(end, dividend);
         var divisors = [];
-        for (var i = start; i < dividend; i++) {
+        for (var i = start; i <= end; i++) {
             if (dividend % i === 0 && dividend / i <= end) {
                 divisors.push(i);
             }
@@ -464,7 +467,7 @@ var pageObj = {
             eval(pageObj.modal2Exercise(modalStr));
             return true;
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return false;
         }
     },
@@ -578,6 +581,8 @@ var pageObj = {
     getBackSteppingNumber: function (baseSum, preMathFlag, sufMathFlag, min, max) {
         baseSum = eval(baseSum);
         min = pageObj.getMinValue(eval(min), eval(max));
+        if (min == 0) min = 1;
+
         max = pageObj.getMaxValue(eval(min), eval(max));
         // 如果baseSum为undefined 且 preMathFlag为undefined,直接初始一个值
         if (typeof (baseSum) === 'undefined' && typeof (preMathFlag) === 'undefined') {
@@ -591,7 +596,14 @@ var pageObj = {
                 return pageObj.getRandomNum(pageObj.getMaxValue(min, 2), Math.floor(Math.sqrt(max)));
             }
             if (sufMathFlag === '/') {
-                return pageObj.getRandomNonPrimeNum(Math.ceil(min * min), Math.ceil(max));
+                let start = Math.ceil(min * min);
+                let end = Math.ceil(max * max);
+                let result = NaN;
+                while (isNaN(result) || !result) {
+                    var randomNum = Math.floor(Math.random() * (end - start + 1) + start);
+                    result = pageObj.getRandomNonPrimeNum(start, end, max, randomNum);
+                }
+                return result;
                 // return pageObj.getRandomNonPrimeNum(Math.ceil(min * min), Math.floor(Math.sqrt(max)));
             }
         }
@@ -606,22 +618,38 @@ var pageObj = {
                 return pageObj.getRandomNum(pageObj.getMaxValue(min, 2), Math.floor(Math.sqrt(max / baseSum)));
             }
             if (sufMathFlag === '/') {
-                return baseSum * pageObj.getRandomNum(min, Math.floor(max / baseSum));
+                let result = NaN;
+                while (isNaN(result) || !result) {
+
+                    result = pageObj.getRandomDivisorInRange(min, max, baseSum);
+
+                    // result = baseSum * pageObj.getRandomNum(min, baseSum);
+                }
+                return result;
+                // return baseSum * pageObj.getRandomNum(min, baseSum);
+                // return baseSum * pageObj.getRandomNum(min, Math.floor(max / baseSum));
             }
         }
-        max = pageObj.getMaxValue(eval(baseSum), eval(max));
         min = pageObj.getMinValue(eval(baseSum), eval(min));
         if (preMathFlag === '+') {
+            max = pageObj.getMaxValue(eval(baseSum), eval(max));
             return pageObj.getRandomNum(min, Math.floor((max - baseSum) / 2));
         }
         if (preMathFlag === '-') {
+            max = pageObj.getMaxValue(eval(baseSum), eval(max));
             return pageObj.getRandomNum(min, Math.floor((baseSum - min) / 2));
         }
         if (preMathFlag === '*') {
+            max = pageObj.getMaxValue(eval(baseSum), eval(max));
             return pageObj.getRandomNum(pageObj.getMaxValue(min, 2), Math.floor(Math.sqrt(max / baseSum)));
         }
         if (preMathFlag === '/') {
-            return pageObj.getRandomDivisorInRange(baseSum, min, baseSum);
+            let result = NaN;
+            while (isNaN(result) || !result) {
+                result = pageObj.getRandomDivisorInRange(min, max, baseSum);
+            }
+            return result;
+            // return pageObj.getRandomDivisorInRange(baseSum, min, baseSum);
         }
     },
 
@@ -810,6 +838,9 @@ var pageObj = {
                 + (randomObj.bracketType === '2' ? ')' : '')
                 + (randomObj.sufMathFlag || '');
         });
+        if (exerciseStr.includes('?')) {
+            debugger
+        }
         return exerciseStr;
     },
 
@@ -877,7 +908,7 @@ var pageObj = {
                             tempDownloadDetail.partExercises.push(exerciseStr + "_____");
                         } catch (e) {
                             console.log("(" + (j + 1) + ")" + exercise);
-                            console.log(e);
+                            console.error(e);
                             loaddingDiv.hide();
                             if (!advancedSettingsBtn.is(":hidden")) {
                                 advancedSettingsBtn.click();
