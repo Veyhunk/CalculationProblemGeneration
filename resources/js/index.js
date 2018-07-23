@@ -3,7 +3,7 @@
  */
 // 页面主体
 var pageObj = {
-    DEV_MODEL: true,
+    DEV_MODEL: false,
     init: function () {
         // 加载配置事件
         pageObj.loadEvents();
